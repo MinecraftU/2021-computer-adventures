@@ -5,18 +5,17 @@ class Tetromino # A tetromino is a tetris piece
   
   def initialize(piece_data)
     raise ArgumentError unless piece_data.is_a? Matrix
-    
+
     @color_map = {
-      1=>[0, 255, 255, 1], # blue
-      2=>[255, 255, 0, 1], # yellow
-      3=>[128, 0, 128, 1], # purple
-      4=>[0, 255, 0, 1], # green
-      5=>[255, 0, 0, 1], # red
-      6=>[0, 0, 255, 1], # dark blue
-      7=>[255, 127, 0, 1] #orange
+      1=>"aqua",
+      2=>"yellow",
+      3=>"purple",
+      4=>"green",
+      5=>"red",
+      6=>"blue",
+      7=>"orange"
     } # Color scheme source: https://www.schemecolor.com/tetris-game-color-scheme.php
-    
-    # @screen = screen
+
     @piece_data = piece_data
   end
   
@@ -41,4 +40,3 @@ class Tetromino # A tetromino is a tetris piece
     end
   end
 end
-

@@ -3,7 +3,7 @@ require "matrix" # matrix is installed when you install ruby, no need to use gem
 require_relative "tetrominos"
 
 set title: "Tetrominos"
-set width: 1000
+set width: 800
 
 # tetrominos from https://user-images.githubusercontent.com/124208/127236186-733e6247-0824-4b2e-b464-552cd700bb65.png
 tetrominos = [
