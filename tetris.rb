@@ -3,22 +3,31 @@ require "matrix" # matrix is installed when you install ruby, no need to use gem
 require_relative "tetrominos"
 require_relative "game"
 
-game = Game.new
 
-set title: "Tetrominos"
-set width: 500
-set height: 1000
+game = Game.new
 
 size = 50
 
+set title: "Tetrominos"
+set width: size*game.gameboard.width
+set height: size*game.gameboard.height
+
 t = 1
 update do
-  if t % 30 == 0
-    game.draw([0, 0], size)
-    game.tetromino.fall
-    game.gameboard = game.tetromino.gameboard
-  end
-  t += 1
+    if t % 30 == 0
+        game.draw([0, 0], size)
+        game.tetromino.fall
+        game.gameboard = game.tetromino.gameboard
+        game.tetromino.moved = false
+    end
+
+    on :key_down do |event|
+        if !game.tetromino.moved
+            game.tetromino.moved = game.tetromino.move(event.key)
+        end
+    end
+
+    t += 1
 end
 
 show
