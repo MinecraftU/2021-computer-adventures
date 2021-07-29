@@ -1,25 +1,93 @@
-require "rubygame"
+require "ruby2d"
 require "matrix" # matrix is installed when you install ruby, no need to use gem. docs: https://ruby-doc.org/stdlib-2.5.1/libdoc/matrix/rdoc/Matrix.html
 require_relative "tetrominos"
 
-Rubygame.init
-screen = Rubygame::Screen.set_mode([1700, 150])
-screen.title = "Tetrominos"
-screen.fill [255, 255, 255]
-screen.update
-queue = Rubygame::EventQueue.new
+class Game
+    attr_reader :tetrominos, :gameboard, :tetromino, :delay, :color_map
 
-# tetrominos from https://user-images.githubusercontent.com/124208/127236186-733e6247-0824-4b2e-b464-552cd700bb65.png
-tetrominos = [
-    Tetromino.new(Matrix[[1, 1, 1, 1]], screen),
-    Tetromino.new(Matrix[[6, 0, 0], [6, 6, 6]], screen),
-    Tetromino.new(Matrix[[0, 0, 7], [7, 7, 7]], screen),
-    Tetromino.new(Matrix[[2, 2], [2, 2]], screen),
-    Tetromino.new(Matrix[[0, 4, 4], [4, 4, 0]], screen),
-    Tetromino.new(Matrix[[0, 3, 0], [3, 3, 3]], screen),
-    Tetromino.new(Matrix[[5, 5, 0], [0, 5, 5]], screen)
-]
+    def initialize
+        # tetrominos from https://user-images.githubusercontent.com/124208/127236186-733e6247-0824-4b2e-b464-552cd700bb65.png
+        @tetrominos = [
+            Matrix[[1, 1, 1, 1]],
+            Matrix[[6, 0, 0], [6, 6, 6]],
+            Matrix[[0, 0, 7], [7, 7, 7]],
+            Matrix[[2, 2], [2, 2]],
+            Matrix[[0, 4, 4], [4, 4, 0]],
+            Matrix[[0, 3, 0], [3, 3, 3]],
+            Matrix[[5, 5, 0], [0, 5, 5]]
+        ]
+        
+        @color_map = {
+            1=>"aqua",
+            2=>"yellow",
+            3=>"purple",
+            4=>"green",
+            5=>"red",
+            6=>"blue",
+            7=>"orange"
+        } # Color scheme source: https://www.schemecolor.com/tetris-game-color-scheme.php
 
+        height = 20
+        width = 10
+        @gameboard = Matrix.zero(height, width)
+        gameboard.define_singleton_method(:height) {height}
+        gameboard.define_singleton_method(:width) {width}
+        @delay = 1
+
+        pos = [0, 0]
+        @tetromino = Tetromino.new(gameboard, tetrominos.sample, [0, 0])
+        tetromino.put_tetromino
+    end
+
+    def draw(start_pos, size) # size is the side length of a square
+        (0...gameboard.width).each do |i|
+            (0...gameboard.height).each do |j|
+                if gameboard[j, i] == 0
+                    color = "white"
+                    Square.new(
+                        x: start_pos[0] + size*i, y: start_pos[1] + size*j,
+                        size: size,
+                        color: color,
+                        z: 10
+                    )
+                else
+                    color = color_map[gameboard[j, i]]
+                    # draws a square starting at point (x, y) with side length size and color color. z is the layer (the higher z is, the higher on the layers the shape is)
+                    Square.new(
+                        x: start_pos[0] + size*i, y: start_pos[1] + size*j,
+                        size: size,
+                        color: color,
+                        z: 10
+                    )
+                end
+            end
+        end
+    end
+
+    def tick
+        draw([0, 0], 100)
+        tetromino.move
+        gameboard = tetromino.gameboard
+    end
+end
+
+set title: "Tetris"
+set width: 1000
+set height: 2000
+set background: "white"
+
+game = Game.new
+t = 1
+update do
+    if t % 30 == 0
+        game.tick
+    end
+    t += 1
+end
+
+show
+
+"""
 sz = 50
 running = true
 while running
@@ -35,3 +103,4 @@ while running
         end
     end
 end
+"""
