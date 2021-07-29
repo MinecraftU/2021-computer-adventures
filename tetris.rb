@@ -42,24 +42,15 @@ class Game
     def draw(start_pos, size) # size is the side length of a square
         (0...gameboard.width).each do |i|
             (0...gameboard.height).each do |j|
-                if gameboard[j, i] == 0
-                    color = "white"
-                    Square.new(
-                        x: start_pos[0] + size*i, y: start_pos[1] + size*j,
-                        size: size,
-                        color: color,
-                        z: 10
-                    )
-                else
-                    color = color_map[gameboard[j, i]]
-                    # draws a square starting at point (x, y) with side length size and color color. z is the layer (the higher z is, the higher on the layers the shape is)
-                    Square.new(
-                        x: start_pos[0] + size*i, y: start_pos[1] + size*j,
-                        size: size,
-                        color: color,
-                        z: 10
-                    )
-                end
+                # the color is white if the gameboard space is empty, otherwise the color is the matching color on the color_map hash.
+                color = gameboard[j, i] == 0 ? "white" : color_map[gameboard[j, i]] 
+                # draws a square starting at point (x, y) with side length size and color color. z is the layer (the higher z is, the higher on the layers the shape is)
+                Square.new(
+                    x: start_pos[0] + size*i, y: start_pos[1] + size*j,
+                    size: size,
+                    color: color,
+                    z: 10
+                )
             end
         end
     end
@@ -86,21 +77,3 @@ update do
 end
 
 show
-
-"""
-sz = 50
-running = true
-while running
-    queue.each do |event|
-        case event
-        when Rubygame::QuitEvent
-            running = false
-        when Rubygame::ActiveEvent
-            (0...7).each do |i|
-                tetrominos[i].draw([(i)*sz*5 + 10, 10], sz)
-                screen.update
-            end
-        end
-    end
-end
-"""
