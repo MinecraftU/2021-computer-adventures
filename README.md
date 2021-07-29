@@ -10,6 +10,8 @@ In this camp we are going to create the game [Tetris](https://en.wikipedia.org/w
 
 ## Install dependencies
 
+This project makes use of [Ruby2D](https://github.com/ruby2d/ruby2d).
+
 Run `bundle install`
 
 (If you don't have bundler installed run `gem install bundler` first.)
