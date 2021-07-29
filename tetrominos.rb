@@ -1,42 +1,37 @@
 require "matrix" # matrix is installed when you install ruby, no need to use gem. docs: https://ruby-doc.org/stdlib-2.5.1/libdoc/matrix/rdoc/Matrix.html
 
 class Tetromino # A tetromino is a tetris piece
-  attr_reader :piece_data, :color_map, :screen
-  
-  def initialize(piece_data)
+  attr_reader :piece_data, :color_map, :width, :height, :gameboard
+  attr_accessor :pos
+
+  def initialize(gameboard, piece_data, pos)
     raise ArgumentError unless piece_data.is_a? Matrix
-
-    @color_map = {
-      1=>"aqua",
-      2=>"yellow",
-      3=>"purple",
-      4=>"green",
-      5=>"red",
-      6=>"blue",
-      7=>"orange"
-    } # Color scheme source: https://www.schemecolor.com/tetris-game-color-scheme.php
-
+    
+    @gameboard = gameboard
+    @pos = pos
     @piece_data = piece_data
+    @width = piece_data.row(0).to_a.length
+    @height = piece_data.column(0).to_a.length
   end
-  
-  def draw(start_pos, size) # size is the side length of a square
-    width = piece_data.row(0).to_a.length
-    height = piece_data.column(0).to_a.length
+
+  def put_tetromino(clear=false)
     (0...width).each do |i|
       (0...height).each do |j|
-        if piece_data[j, i] != 0
-          color = color_map[piece_data[j, i]]
-          left_top = [start_pos[0] + size*i, start_pos[1] + size*j]
-          right_bottom = [start_pos[0] + size*(i + 1), start_pos[1] + size*(j + 1)]
-          # screen.draw_box_s left_top, right_bottom, color
-          Square.new(
-            x: start_pos[0] + size*i, y: start_pos[1] + size*j,
-            size: size,
-            color: color,
-            z: 10
-          )
+        if clear
+          gameboard[pos[0]+j, pos[1]+i] = 0
+        else
+          gameboard[pos[0]+j, pos[1]+i] = piece_data[j, i]
         end
       end
     end
   end
+
+  def fall
+    if pos[0] + height != gameboard.height
+      put_tetromino(clear=true)
+      pos[0] += 1
+      put_tetromino
+    end
+  end
+
 end
