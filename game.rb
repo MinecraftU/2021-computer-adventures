@@ -1,10 +1,10 @@
 class Game
-    attr_reader :tetrominos, :color_map, :size
+    attr_reader :tetromino_shapes, :color_map, :size
     attr_accessor :gameboard, :tetromino
 
     def initialize
         # tetrominos from https://user-images.githubusercontent.com/124208/127236186-733e6247-0824-4b2e-b464-552cd700bb65.png
-        @tetrominos = [
+        @tetromino_shapes = [
             Matrix[[1, 1, 1, 1]],
             Matrix[[6, 0, 0], [6, 6, 6]],
             Matrix[[0, 0, 7], [7, 7, 7]],
@@ -32,7 +32,7 @@ class Game
         @size = 50
 
         pos = [0, 0]
-        @tetromino = Tetromino.new(gameboard, tetrominos.sample, [0, 0])
+        @tetromino = Tetromino.new(gameboard, tetromino_shapes.sample, [0, 0])
         tetromino.put_tetromino
     end
 

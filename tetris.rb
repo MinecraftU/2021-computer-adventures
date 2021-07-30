@@ -3,7 +3,6 @@ require "matrix" # matrix is installed when you install ruby, no need to use gem
 require_relative "tetrominos"
 require_relative "game"
 
-
 game = Game.new
 
 size = 50
@@ -12,15 +11,16 @@ set title: "Tetris"
 set width: size*game.gameboard.width
 set height: size*game.gameboard.height
 
-
-
 t = 1
 update do
-    if t % 15 == 0
+    if t % 12 == 0
         game.tetromino.moved = false
     end
 
     if t % 30 == 0
+        if game.tetromino.is_dead
+            game.tetromino = Tetromino.new(game.gameboard, game.tetromino_shapes.sample, [0, 0])
+        end
         game.draw([0, 0], size)
         game.tetromino.fall
         game.gameboard = game.tetromino.gameboard
