@@ -16,25 +16,25 @@ set height: size*game.gameboard.height
 
 t = 1
 update do
-  if t % 8 == 0
-    game.tetromino.moved = false
-  end
+    if t % 15 == 0
+        game.tetromino.moved = false
+    end
 
-  if t % 30 == 0
-    game.draw([0, 0], size)
-    game.tetromino.fall
-    game.gameboard = game.tetromino.gameboard
-  end
+    if t % 30 == 0
+        game.draw([0, 0], size)
+        game.tetromino.fall
+        game.gameboard = game.tetromino.gameboard
+    end
 
-  t += 1
+    t += 1
 end
 
 on :key_held do |event|
-  if !game.tetromino.moved
-    game.tetromino.moved = game.tetromino.move(event.key)
-    game.gameboard = game.tetromino.gameboard
-    game.draw([0, 0], size)
-  end
+    if !game.tetromino.moved
+        game.tetromino.moved = game.tetromino.move(event.key)
+        game.gameboard = game.tetromino.gameboard
+        game.draw([0, 0], size)
+    end
 end
 
 show
