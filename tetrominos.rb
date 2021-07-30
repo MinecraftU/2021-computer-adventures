@@ -2,7 +2,7 @@ require "matrix" # matrix is installed when you install ruby, no need to use gem
 
 class Tetromino # A tetromino is a tetris piece
   attr_reader :piece_data, :color_map, :width, :height, :gameboard
-  attr_accessor :pos
+  attr_accessor :pos, :moved
 
   def initialize(gameboard, piece_data, pos)
     raise ArgumentError unless piece_data.is_a? Matrix
@@ -12,6 +12,7 @@ class Tetromino # A tetromino is a tetris piece
     @piece_data = piece_data
     @width = piece_data.row(0).to_a.length
     @height = piece_data.column(0).to_a.length
+    @moved = false
   end
 
   def put_tetromino(clear=false)
@@ -26,12 +27,33 @@ class Tetromino # A tetromino is a tetris piece
     end
   end
 
+  def update(pos_index, inc)
+    put_tetromino(clear=true)
+    pos[pos_index] += inc
+    put_tetromino
+  end
+
   def fall
     if pos[0] + height != gameboard.height
-      put_tetromino(clear=true)
-      pos[0] += 1
-      put_tetromino
+      update(0, 1)
     end
   end
 
+  def move(dir)
+    case dir
+    when "left"
+      if pos[1] > 0
+        update(1, -1)
+        return true
+      end
+    when "right"
+      if pos[1] < gameboard.width - width
+        update(1, 1)
+        return true
+      end
+    else
+      return false
+    end
+    false
+  end
 end
