@@ -13,7 +13,7 @@ set height: size*game.gameboard.height
 
 t = 1
 update do
-  if t % 8 == 0
+  if t % 15 == 0
     game.tetromino.moved = false
   end
 

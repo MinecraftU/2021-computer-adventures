@@ -51,9 +51,21 @@ class Tetromino # A tetromino is a tetris piece
         update(1, 1)
         return true
       end
+    when "up"
+      rotate
+      return true
     else
       return false
     end
     false
+  end
+
+  def rotate
+    height % 2 == 0 ? update(0, -(height / 2)) : update(0, -(height / 2 - 1))
+    put_tetromino(clear=true)
+    @piece_data = Matrix[*(0...width).map {|i| piece_data.transpose.row(i).to_a.reverse}] # Matrix.transpose almost rotates, but we need to reverse each row. Asterix to prevent everything to be nested in one []
+    @width = piece_data.row(0).to_a.length
+    @height = piece_data.column(0).to_a.length
+    put_tetromino
   end
 end
