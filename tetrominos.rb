@@ -18,10 +18,12 @@ class Tetromino # A tetromino is a tetris piece
   def put_tetromino(clear=false)
     (0...width).each do |i|
       (0...height).each do |j|
-        if clear
-          gameboard[pos[0]+j, pos[1]+i] = 0
-        else
-          gameboard[pos[0]+j, pos[1]+i] = piece_data[j, i]
+        if piece_data[j, i] != 0
+          if clear
+              gameboard[pos[0]+j, pos[1]+i] = 0
+          else
+            gameboard[pos[0]+j, pos[1]+i] = piece_data[j, i]
+          end
         end
       end
     end
@@ -31,6 +33,21 @@ class Tetromino # A tetromino is a tetris piece
     put_tetromino(clear=true)
     pos[pos_index] += inc
     put_tetromino
+  end
+
+  def is_dead
+    lowest_poses = [0] * width
+    (height - 1).downto(0).each do |j|
+      (0...width).each do |i|
+        if lowest_poses[i] == 0 && piece_data[j, i] != 0
+          lowest_poses[i] = [j + pos[0], i + pos[1]]
+        end
+      end
+    end
+
+    # return (tetromino hit the bottom of the gameboadr) OR (something is below one or more of the tetromino squares.)
+    return pos[0] + height == gameboard.height || \
+    lowest_poses.map {|pos| gameboard[pos[0]+1, pos[1]] != 0}.include?(true)
   end
 
   def fall
@@ -61,7 +78,6 @@ class Tetromino # A tetromino is a tetris piece
   end
 
   def rotate
-    height % 2 == 0 ? update(0, -(height / 2)) : update(0, -(height / 2 - 1))
     put_tetromino(clear=true)
     @piece_data = Matrix[*(0...width).map {|i| piece_data.transpose.row(i).to_a.reverse}] # Matrix.transpose almost rotates, but we need to reverse each row. Asterix to prevent everything to be nested in one []
     @width = piece_data.row(0).to_a.length
