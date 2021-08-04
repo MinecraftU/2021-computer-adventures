@@ -8,6 +8,7 @@ game = Game.new
 size = 50
 
 set title: "Tetris"
+set background: "white"
 set width: size*game.gameboard.width
 set height: size*game.gameboard.height
 
@@ -29,7 +30,7 @@ update do
   t += 1
 end
 
-on :key_held do |event|
+on :key_down do |event|
   if !game.tetromino.moved
     game.tetromino.moved = game.tetromino.move(event.key)
     game.gameboard = game.tetromino.gameboard
