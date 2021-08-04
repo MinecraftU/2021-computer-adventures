@@ -1,5 +1,5 @@
 class Game
-  attr_reader :tetromino_shapes, :color_map, :size
+  attr_reader :tetromino_shapes, :color_map, :size, :squares
   attr_accessor :gameboard, :tetromino
 
   def initialize
@@ -30,6 +30,7 @@ class Game
     gameboard.define_singleton_method(:height) {height}
     gameboard.define_singleton_method(:width) {width}
     @size = 50
+    @squares = Matrix.zero(height, width)
 
     pos = [0, 0]
     @tetromino = Tetromino.new(gameboard, tetromino_shapes.sample, [0, 0])
@@ -39,15 +40,19 @@ class Game
   def draw(start_pos, size) # size is the side length of a square
     (0...gameboard.width).each do |i|
       (0...gameboard.height).each do |j|
-        # the color is white if the gameboard space is empty, otherwise the color is the matching color on the color_map hash.
-        color = gameboard[j, i] == 0 ? "white" : color_map[gameboard[j, i]] 
-        # draws a square starting at point (x, y) with side length size and color color. z is the layer (the higher z is, the higher on the layers the shape is)
-        Square.new(
-          x: start_pos[0] + size*i, y: start_pos[1] + size*j,
-          size: size,
-          color: color,
-          z: 10
-        )
+        if squares[j, i] != 0
+          squares[j, i].remove
+        end
+        if gameboard[j, i] != 0
+          color = color_map[gameboard[j, i]] 
+          # draws a square starting at point (x, y) with side length size and color color. z is the layer (the higher z is, the higher on the layers the shape is)
+          squares[j, i] = Square.new(
+            x: start_pos[0] + size*i, y: start_pos[1] + size*j,
+            size: size,
+            color: color,
+            z: 10
+          )
+        end
       end
     end
   end
