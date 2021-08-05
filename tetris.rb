@@ -19,11 +19,12 @@ update do
   end
 
   if t % 30 == 0
-    if game.tetromino.is_dead
+    if game.tetromino.dead
       game.tetromino = Tetromino.new(game.gameboard, game.tetromino_shapes.sample, [0, 0])
     end
     game.draw([0, 0], size)
     game.tetromino.fall
+    puts "in tetris.rb" + game.tetromino.gameboard.to_s
     game.gameboard = game.tetromino.gameboard
   end
 

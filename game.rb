@@ -34,7 +34,7 @@ class Game
 
     pos = [0, 0]
     @tetromino = Tetromino.new(gameboard, tetromino_shapes.sample, [0, 0])
-    tetromino.put_tetromino
+    tetromino.put_tetromino(gameboard, pos, tetromino.width, tetromino.height)
   end
 
   def draw(start_pos, size) # size is the side length of a square
