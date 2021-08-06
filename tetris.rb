@@ -9,8 +9,8 @@ size = 50
 
 set title: "Tetris"
 set background: "white"
-set width: size*game.gameboard.width
-set height: size*game.gameboard.height
+set width: size*game.gameboard_width
+set height: size*game.gameboard_height
 
 t = 1
 update do
@@ -24,7 +24,6 @@ update do
     end
     game.draw([0, 0], size)
     game.tetromino.fall
-    puts "in tetris.rb" + game.tetromino.gameboard.to_s
     game.gameboard = game.tetromino.gameboard
   end
 
