@@ -27,8 +27,7 @@ class Game
     @gameboard_height = 20
     @gameboard_width = 10
     @gameboard = Matrix.zero(gameboard_height, gameboard_width)
-    @size = 50
-    @squares = Matrix.zero(height, width)
+    @size = 40
 
     pos = [0, 0]
     @tetromino = Tetromino.new(gameboard, tetromino_shapes.sample, [0, 0])

@@ -5,7 +5,7 @@ require_relative "game"
 
 game = Game.new
 
-size = 50
+size = 40
 
 set title: "Tetris"
 set background: "white"
