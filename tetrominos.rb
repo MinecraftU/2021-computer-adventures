@@ -4,11 +4,11 @@ class Tetromino # A tetromino is a tetris piece
   attr_reader :piece_data, :color_map, :width, :height, :dead, :gameboard_height, :gameboard_width
   attr_accessor :pos, :moved, :gameboard  
 
-  def initialize(gameboard, piece_data, pos)
+  def initialize(gameboard, piece_data, pos, gameboard_height, gameboard_width)
     raise ArgumentError unless piece_data.is_a? Matrix
     
-    @gameboard_width = 10
-    @gameboard_height = 20
+    @gameboard_height = gameboard_height
+    @gameboard_width = gameboard_width
     @gameboard = gameboard
     @pos = pos
     @piece_data = piece_data

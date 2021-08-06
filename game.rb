@@ -2,7 +2,7 @@ class Game
   attr_reader :tetromino_shapes, :color_map, :size, :gameboard_width, :gameboard_height
   attr_accessor :gameboard, :tetromino
 
-  def initialize
+  def initialize(size, gameboard_height, gameboard_width)
     # tetrominos from https://user-images.githubusercontent.com/124208/127236186-733e6247-0824-4b2e-b464-552cd700bb65.png
     @tetromino_shapes = [
       Matrix[[1, 1, 1, 1]],
@@ -24,13 +24,13 @@ class Game
       7=>"orange"
     } # Color scheme source: https://www.schemecolor.com/tetris-game-color-scheme.php
 
-    @gameboard_height = 20
-    @gameboard_width = 10
+    @size = size
+    @gameboard_height = gameboard_height
+    @gameboard_width = gameboard_width
     @gameboard = Matrix.zero(gameboard_height, gameboard_width)
-    @size = 40
 
     pos = [0, 0]
-    @tetromino = Tetromino.new(gameboard, tetromino_shapes.sample, [0, 0])
+    @tetromino = Tetromino.new(gameboard, tetromino_shapes.sample, [0, 0], gameboard_height, gameboard_width)
     tetromino.put_tetromino(gameboard, pos, tetromino.width, tetromino.height)
   end
 
