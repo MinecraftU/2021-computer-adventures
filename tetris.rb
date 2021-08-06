@@ -5,12 +5,12 @@ require_relative "game"
 
 game = Game.new
 
-size = 50
+size = 40
 
 set title: "Tetris"
 set background: "white"
-set width: size*game.gameboard.width
-set height: size*game.gameboard.height
+set width: size*game.gameboard_width
+set height: size*game.gameboard_height
 
 t = 1
 update do
@@ -19,7 +19,7 @@ update do
   end
 
   if t % 30 == 0
-    if game.tetromino.is_dead
+    if game.tetromino.dead
       game.tetromino = Tetromino.new(game.gameboard, game.tetromino_shapes.sample, [0, 0])
     end
     game.draw([0, 0], size)
