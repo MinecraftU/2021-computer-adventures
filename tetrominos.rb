@@ -29,7 +29,7 @@ class Tetromino # A tetromino is a tetris piece
             end
             new_gameboard[_pos[0]+j, _pos[1]+i] = 0
           else
-            new_gameboard[_pos[0]+j, _pos[1]+i] = piece_data[j, i]
+            new_gameboard[_pos[0]+j, _pos[1]+i] = _piece_data[j, i]
           end
         end
       end
@@ -106,10 +106,6 @@ class Tetromino # A tetromino is a tetris piece
       @height = shadow_height
       @piece_data = shadowPieceData
       @gameboard = shadow_gameboard
-      puts width
-      puts height
-      puts piece_data
-      puts gameboard
     end
   end
 end
