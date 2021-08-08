@@ -22,7 +22,7 @@ update do
 
   if t % 30 == 0
     if game.tetromino.dead
-      game.tetromino = Tetromino.new(game.gameboard, game.tetromino_shapes.sample, [0, 0], gameboard_height, gameboard_width)
+      game.create_tetromino()
     end
     game.draw([0, 0], size)
     game.tetromino.fall

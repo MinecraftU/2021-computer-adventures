@@ -29,9 +29,12 @@ class Game
     @gameboard_width = gameboard_width
     @gameboard = Matrix.zero(gameboard_height, gameboard_width)
 
-    pos = [0, 0]
+    create_tetromino()
+  end
+
+  def create_tetromino()
     @tetromino = Tetromino.new(gameboard, tetromino_shapes.sample, [0, 0], gameboard_height, gameboard_width)
-    tetromino.put_tetromino(gameboard, pos, tetromino.width, tetromino.height)
+    tetromino.put_tetromino(gameboard, [0, 0], tetromino.width, tetromino.height)
   end
 
   def draw(start_pos, size) # size is the side length of a square
