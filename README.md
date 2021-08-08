@@ -24,10 +24,3 @@ Run `bundle install`
 
 * `tetris.rb` is the main game program that you can run from the command line
 * `tetrominos.rb` is a class representing a tetromino
-
-# TODO
-
-
-
-haha i am cool
-- [ ] Refector the tetromino class to be just one tetromino
