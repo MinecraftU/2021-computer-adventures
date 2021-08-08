@@ -83,8 +83,7 @@ class Tetromino # A tetromino is a tetris piece
         return true
       end
     when "up"
-      rotate
-      return true
+      return rotate
     else
       return false
     end
@@ -96,16 +95,21 @@ class Tetromino # A tetromino is a tetris piece
     shadowPieceData = Matrix[*(0...width).map {|i| piece_data.transpose.row(i).to_a.reverse}] # Matrix.transpose almost rotates, but we need to reverse each row. Asterix to prevent everything to be nested in one []
     shadow_width = shadowPieceData.row(0).to_a.length
     shadow_height = shadowPieceData.column(0).to_a.length
-    shadow_gameboard = put_tetromino(gameboardWithoutTetromino, pos, shadow_width, shadow_height, shadowPieceData)
-    if collision_detect(shadow_gameboard, pos, [shadow_height, shadow_width], shadowPieceData)
-      if allow_die
-        @dead = true
+    begin
+      shadow_gameboard = put_tetromino(gameboardWithoutTetromino, pos, shadow_width, shadow_height, shadowPieceData)
+      if collision_detect(shadow_gameboard, pos, [shadow_height, shadow_width], shadowPieceData)
+        if allow_die
+          @dead = true
+        end
+      else
+        @width = shadow_width
+        @height = shadow_height
+        @piece_data = shadowPieceData
+        @gameboard = shadow_gameboard
       end
-    else
-      @width = shadow_width
-      @height = shadow_height
-      @piece_data = shadowPieceData
-      @gameboard = shadow_gameboard
+    rescue
+      return false
     end
+    true
   end
 end
