@@ -12,7 +12,6 @@ set background: "white"
 set width: size*game.gameboard_width
 set height: size*game.gameboard_height
 
-
 t = 1
 update do
   if t % 12 == 0

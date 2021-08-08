@@ -38,7 +38,7 @@ class Tetromino # A tetromino is a tetris piece
   end
 
   def collision_detect(shadow_gameboard, shadow_pos, shadow_size, shadow_piece_data)
-    shadowGameboardWithoutTetromino = put_tetromino(shadow_gameboard, shadow_pos, shadow_size[1], shadow_size[0], piece_data, clear=true)
+    shadowGameboardWithoutTetromino = put_tetromino(shadow_gameboard, shadow_pos, shadow_size[1], shadow_size[0], shadow_piece_data, clear=true)
     shadow_slice = shadowGameboardWithoutTetromino.minor((shadow_pos[0]...shadow_pos[0]+shadow_size[0]), (shadow_pos[1]...shadow_pos[1]+shadow_size[1]))
 
     gameboardWithoutTetromino = put_tetromino(gameboard, pos, width, height, piece_data, clear=true)
