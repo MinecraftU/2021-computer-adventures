@@ -26,7 +26,7 @@ update do
     end
     game.draw([0, 0], size)
     game.tetromino.fall
-    game.gameboard = game.tetromino.gameboard
+    game.update_gameboard
   end
 
   t += 1
@@ -35,7 +35,7 @@ end
 on :key_down do |event|
   if !game.tetromino.moved
     game.tetromino.moved = game.tetromino.move(event.key)
-    game.gameboard = game.tetromino.gameboard
+    game.update_gameboard
     game.draw([0, 0], size)
   end
 end
