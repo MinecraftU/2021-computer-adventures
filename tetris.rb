@@ -1,6 +1,6 @@
 require "ruby2d"
 require "matrix" # matrix is installed when you install ruby, no need to use gem. docs: https://ruby-doc.org/stdlib-2.5.1/libdoc/matrix/rdoc/Matrix.html
-require_relative "tetrominos"
+require_relative "tetromino"
 require_relative "game"
 
 size = 40
