@@ -7,7 +7,7 @@ size = 40
 gameboard_height = 20
 gameboard_width = 10
 
-game = Game.new(size, gameboard_height, gameboard_width)
+game = Game.new(gameboard_height, gameboard_width)
 
 set title: "Tetris"
 set background: "white"

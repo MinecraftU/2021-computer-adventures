@@ -1,7 +1,7 @@
 class Game
   attr_accessor :tetromino
 
-  def initialize(size, gameboard_height, gameboard_width)
+  def initialize(gameboard_height, gameboard_width)
     # tetrominos from https://user-images.githubusercontent.com/124208/127236186-733e6247-0824-4b2e-b464-552cd700bb65.png
     @tetromino_shapes = [
       Matrix[[1, 1, 1, 1]],
