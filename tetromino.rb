@@ -1,5 +1,3 @@
-require "matrix" # matrix is installed when you install ruby, no need to use gem. docs: https://ruby-doc.org/stdlib-2.5.1/libdoc/matrix/rdoc/Matrix.html
-
 class Tetromino # A tetromino is a tetris piece
   attr_reader :piece_data, :width, :height, :pos, :gameboard, :dead, :fall_rate
   attr_accessor :moved
@@ -21,13 +19,13 @@ class Tetromino # A tetromino is a tetris piece
   end
 
   def put_tetromino(_gameboard=gameboard, _pos=pos, _width=width, _height=height, _piece_data=piece_data, clear=false)
-    new_gameboard = Matrix[*_gameboard] # changing new_gameboard changes _gameboard too, which we don't want.
+    new_gameboard = Gameboard[*_gameboard] # changing new_gameboard changes _gameboard too, which we don't want.
     (0..._width).each do |i|
       (0..._height).each do |j|
         if _piece_data[j, i] != 0
           if clear
-            if new_gameboard == Matrix.empty(0, 0)
-              new_gameboard = Matrix.zero(20, 10)
+            if new_gameboard == Gameboard.empty(0, 0)
+              new_gameboard = Gameboard.zero(20, 10)
             end
             new_gameboard[_pos[0]+j, _pos[1]+i] = 0
           else
@@ -110,7 +108,7 @@ class Tetromino # A tetromino is a tetris piece
 
   def rotate(allow_die=true)
     gameboardWithoutTetromino = put_tetromino(gameboard, pos, width, height, piece_data, clear=true)
-    shadowPieceData = Matrix[*(0...width).map {|i| piece_data.transpose.row(i).to_a.reverse}] # Matrix.transpose almost rotates, but we need to reverse each row. Asterix to prevent everything to be nested in one []
+    shadowPieceData = Gameboard[*(0...width).map {|i| piece_data.transpose.row(i).to_a.reverse}] # Matrix.transpose almost rotates, but we need to reverse each row. Asterix to prevent everything to be nested in one []
     shadow_width = shadowPieceData.row(0).to_a.length
     shadow_height = shadowPieceData.column(0).to_a.length
     begin

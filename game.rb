@@ -25,8 +25,8 @@ class Game
 
     @gameboard_height = gameboard_height
     @gameboard_width = gameboard_width
-    @gameboard = Matrix.zero(gameboard_height, gameboard_width)
-    @squares = Matrix.zero(gameboard_height, gameboard_width)
+    @gameboard = Gameboard.zero(gameboard_height, gameboard_width)
+    @squares = Gameboard.zero(gameboard_height, gameboard_width)
 
     create_tetromino()
   end
