@@ -11,8 +11,8 @@ game = Game.new(size, gameboard_height, gameboard_width)
 
 set title: "Tetris"
 set background: "white"
-set width: size*game.gameboard_width
-set height: size*game.gameboard_height
+set width: size*gameboard_width
+set height: size*gameboard_height
 
 t = 1
 update do
