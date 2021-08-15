@@ -26,14 +26,6 @@ class Game
     @gameboard_height = gameboard_height
     @gameboard_width = gameboard_width
     @gameboard = Matrix.zero(gameboard_height, gameboard_width)
-    (0...10).each do |i|
-      @gameboard[-1, i] = 1
-    end
-    (0...10).each do |i|
-      @gameboard[-2, i] = 1
-    end
-    @gameboard[-1, 5] = 0
-    @gameboard[-2, 5] = 0
     @squares = Matrix.zero(gameboard_height, gameboard_width)
 
     create_tetromino()
