@@ -26,6 +26,14 @@ class Game
     @gameboard_height = gameboard_height
     @gameboard_width = gameboard_width
     @gameboard = Matrix.zero(gameboard_height, gameboard_width)
+    (0...10).each do |i|
+      @gameboard[-1, i] = 1
+    end
+    (0...10).each do |i|
+      @gameboard[-2, i] = 1
+    end
+    @gameboard[-1, 5] = 0
+    @gameboard[-2, 5] = 0
     @squares = Matrix.zero(gameboard_height, gameboard_width)
 
     create_tetromino()
@@ -38,6 +46,26 @@ class Game
   def create_tetromino()
     @tetromino = Tetromino.new(@gameboard, @tetromino_shapes.sample, [0, 0], @gameboard_height, @gameboard_width)
     @gameboard = tetromino.put_tetromino(@gameboard, [0, 0], tetromino.width, tetromino.height)
+  end
+
+  def move_all_down(row)
+    (row - 1).downto(-@gameboard_height).each do |i|
+      (0...@gameboard_width).each do |j|
+        @gameboard[i+1, j] = @gameboard[i, j] # set current position in line below current line to current position in the current line
+        @gameboard[i, j] = 0 # set current position in current line to zero
+      end
+    end
+  end
+
+  def remove_filled_rows
+    -1.downto(-@gameboard_height).each do |row|
+      while !@gameboard.row(row).include?(0) # while row is full
+        (0...@gameboard_width).each {|i| @gameboard[row, i] = 0} # set the line to all zeros
+        unless row == -@gameboard_height # top row doesn't have anything above it, so no need to move stuff down.
+          move_all_down(row)
+        end
+      end
+    end
   end
 
   def draw(start_pos, size) # size is the side length of a square
