@@ -23,4 +23,5 @@ Run `bundle install`
 # Code structure
 
 * `tetris.rb` is the main game program that you can run from the command line
-* `tetrominos.rb` is a class representing a tetromino
+* `game.rb` contains the game class
+* `tetrominos.rb` contains a class representing a tetromino
