@@ -3,13 +3,17 @@ require "matrix" # matrix is installed when you install ruby, no need to use gem
 require_relative "tetromino"
 require_relative "gameboard"
 require_relative "game"
+require "logger"
+
+log = Logger.new('log.txt')
 
 size = 40
 gameboard_height = 20
 gameboard_width = 10
 
-game = Game.new(gameboard_height, gameboard_width)
+game = Game.new(gameboard_height, gameboard_width, log)
 
+# These are Ruby2d vars that need to be set
 set title: "Tetris"
 set background: "white"
 set width: size*gameboard_width
