@@ -22,7 +22,8 @@ update do
 
   if t % 30 == 0
     if game.tetromino.dead
-      game.create_tetromino()
+      game.remove_filled_rows
+      game.create_tetromino
     end
     game.draw([0, 0], size)
     game.tetromino.fall
