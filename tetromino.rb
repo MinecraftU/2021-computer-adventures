@@ -1,7 +1,7 @@
 require "matrix" # matrix is installed when you install ruby, no need to use gem. docs: https://ruby-doc.org/stdlib-2.5.1/libdoc/matrix/rdoc/Matrix.html
 
 class Tetromino # A tetromino is a tetris piece
-  attr_reader :piece_data, :width, :height, :pos, :gameboard, :dead
+  attr_reader :piece_data, :width, :height, :pos, :gameboard, :dead, :fall_rate
   attr_accessor :moved
 
   def initialize(gameboard, piece_data, pos, gameboard_height, gameboard_width)
@@ -16,6 +16,8 @@ class Tetromino # A tetromino is a tetris piece
     @height = piece_data.column(0).to_a.length
     @moved = false
     @dead = false
+    @fall_rate = 2 # ticks per second
+    @accelerated = false
   end
 
   def put_tetromino(_gameboard=gameboard, _pos=pos, _width=width, _height=height, _piece_data=piece_data, clear=false)
@@ -70,6 +72,13 @@ class Tetromino # A tetromino is a tetris piece
     end
   end
 
+  def reset_fall_rate
+    if @accelerated
+      @fall_rate /= 5
+    end
+    @accelerated = false
+  end
+
   def move(dir)
     case dir
     when "left"
@@ -84,8 +93,17 @@ class Tetromino # A tetromino is a tetris piece
       end
     when "up"
       return rotate
-    else
-      return false
+    when "down"
+      if !@accelerated
+        @fall_rate *= 5
+        @accelerated = true
+      end
+      return @accelerated
+    when "space"
+      while !dead
+        fall
+      end
+      return true
     end
     false
   end
