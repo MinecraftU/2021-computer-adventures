@@ -1,14 +1,19 @@
 require "ruby2d"
 require "matrix" # matrix is installed when you install ruby, no need to use gem. docs: https://ruby-doc.org/stdlib-2.5.1/libdoc/matrix/rdoc/Matrix.html
 require_relative "tetromino"
+require_relative "gameboard"
 require_relative "game"
+require "logger"
+
+log = Logger.new('log.txt')
 
 size = 40
 gameboard_height = 20
 gameboard_width = 10
 
-game = Game.new(gameboard_height, gameboard_width)
+game = Game.new(gameboard_height, gameboard_width, log)
 
+# These are Ruby2d vars that need to be set
 set title: "Tetris"
 set background: "white"
 set width: size*gameboard_width
