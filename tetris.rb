@@ -1,19 +1,14 @@
 require "ruby2d"
 require "matrix" # matrix is installed when you install ruby, no need to use gem. docs: https://ruby-doc.org/stdlib-2.5.1/libdoc/matrix/rdoc/Matrix.html
 require_relative "tetromino"
-require_relative "gameboard"
 require_relative "game"
-require "logger"
-
-log = Logger.new('log.txt')
 
 size = 40
 gameboard_height = 20
 gameboard_width = 10
 
-game = Game.new(gameboard_height, gameboard_width, log)
+game = Game.new(gameboard_height, gameboard_width)
 
-# These are Ruby2d vars that need to be set
 set title: "Tetris"
 set background: "white"
 set width: size*gameboard_width
@@ -30,7 +25,7 @@ update do
   end
 
   if t % (60 / game.tetromino.fall_rate) == 0
-    if game.tetromino.dead
+    if game.tetromino.hard_dead
       game.remove_filled_rows
       game.create_tetromino
     end
