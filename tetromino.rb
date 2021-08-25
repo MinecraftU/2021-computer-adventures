@@ -71,7 +71,7 @@ class Tetromino # A tetromino is a tetris piece
     if allow_die
       eval_dead(collided)
     end
-    if !soft_dead || pos_index == 1
+    if (!soft_dead || pos_index == 1) && !collided
       @pos = shadow_pos
       @gameboard = shadow_gameboard
     end
