@@ -87,7 +87,7 @@ class Tetromino # A tetromino is a tetris piece
 
   def reset_fall_rate
     if @accelerated
-      @fall_rate /= 3
+      @fall_rate /= 5
     end
     @accelerated = false
   end
@@ -108,7 +108,7 @@ class Tetromino # A tetromino is a tetris piece
       return rotate
     when "down"
       if !@accelerated
-        @fall_rate *= 4
+        @fall_rate *= 5
         @accelerated = true
       end
       return @accelerated
