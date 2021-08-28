@@ -34,13 +34,13 @@ class Tetromino # A tetromino is a tetris piece
   end
 
   def put_tetromino(_gameboard=gameboard, _pos=pos, _width=width, _height=height, _piece_data=piece_data, clear=false)
-    new_gameboard = Matrix[*_gameboard] # changing new_gameboard changes _gameboard too, which we don't want.
+    new_gameboard = Gameboard[*_gameboard] # changing new_gameboard changes _gameboard too, which we don't want.
     (0..._width).each do |i|
       (0..._height).each do |j|
         if _piece_data[j, i] != 0
           if clear
-            if new_gameboard == Matrix.empty(0, 0)
-              new_gameboard = Matrix.zero(20, 10)
+            if new_gameboard == Gameboard.empty(0, 0)
+              new_gameboard = Gameboard.zero(20, 10)
             end
             new_gameboard[_pos[0]+j, _pos[1]+i] = 0
           else
