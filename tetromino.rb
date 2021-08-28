@@ -1,22 +1,39 @@
+require "matrix" # matrix is installed when you install ruby, no need to use gem. docs: https://ruby-doc.org/stdlib-2.5.1/libdoc/matrix/rdoc/Matrix.html
+
 class Tetromino # A tetromino is a tetris piece
-  attr_reader :piece_data, :piece_width, :piece_height, :pos, :gameboard, :dead, :fall_rate
+  attr_reader :piece_data, :width, :height, :pos, :gameboard, :soft_dead, :hard_dead, :fall_rate
   attr_accessor :moved
 
-  def initialize(gameboard, piece_data, pos)
+  def initialize(gameboard, piece_data, pos, gameboard_height, gameboard_width)
     raise ArgumentError unless piece_data.is_a? Matrix
     
+    @gameboard_height = gameboard_height
+    @gameboard_width = gameboard_width
     @gameboard = gameboard
     @pos = pos
     @piece_data = piece_data
-    @piece_width = piece_data.row(0).to_a.length
-    @piece_height = piece_data.column(0).to_a.length
+    @width = piece_data.row(0).to_a.length
+    @height = piece_data.column(0).to_a.length
     @moved = false
-    @dead = false
+    @soft_dead = false
+    @hard_dead = false
     @fall_rate = 2 # ticks per second
     @accelerated = false
   end
 
-  def put_tetromino(_gameboard=gameboard, _pos=pos, _width=piece_width, _height=piece_height, _piece_data=piece_data, clear=false)
+  def eval_dead(collided, tmp=false)
+    if collided
+      if soft_dead
+        @hard_dead = true
+      else
+        @soft_dead = true
+      end
+    elsif soft_dead
+      @soft_dead = false
+    end
+  end
+
+  def put_tetromino(_gameboard=gameboard, _pos=pos, _width=width, _height=height, _piece_data=piece_data, clear=false)
     new_gameboard = Gameboard[*_gameboard] # changing new_gameboard changes _gameboard too, which we don't want.
     (0..._width).each do |i|
       (0..._height).each do |j|
@@ -39,32 +56,32 @@ class Tetromino # A tetromino is a tetris piece
     shadowGameboardWithoutTetromino = put_tetromino(shadow_gameboard, shadow_pos, shadow_size[1], shadow_size[0], shadow_piece_data, clear=true)
     shadow_slice = shadowGameboardWithoutTetromino.minor((shadow_pos[0]...shadow_pos[0]+shadow_size[0]), (shadow_pos[1]...shadow_pos[1]+shadow_size[1]))
 
-    gameboardWithoutTetromino = put_tetromino(gameboard, pos, piece_width, piece_height, piece_data, clear=true)
+    gameboardWithoutTetromino = put_tetromino(gameboard, pos, width, height, piece_data, clear=true)
     real_slice = gameboardWithoutTetromino.minor((shadow_pos[0]...shadow_pos[0]+shadow_size[0]), (shadow_pos[1]...shadow_pos[1]+shadow_size[1]))
 
     shadow_slice != real_slice
   end
 
   def update(pos_index, inc, allow_die=true)
-    gameboardWithoutTetromino = put_tetromino(gameboard, pos, piece_width, piece_height, piece_data, clear=true)
+    gameboardWithoutTetromino = put_tetromino(gameboard, pos, width, height, piece_data, clear=true)
     shadow_pos = pos[0...pos.length]
     shadow_pos[pos_index] += inc
-    shadow_gameboard = put_tetromino(gameboardWithoutTetromino, shadow_pos, piece_width, piece_height, piece_data)
-    if collision_detect(shadow_gameboard, shadow_pos, [piece_height, piece_width], piece_data)
-      if allow_die
-        @dead = true
-      end
-    else
+    shadow_gameboard = put_tetromino(gameboardWithoutTetromino, shadow_pos, width, height, piece_data)
+    collided = collision_detect(shadow_gameboard, shadow_pos, [height, width], piece_data)
+    if allow_die
+      eval_dead(collided)
+    end
+    if (!soft_dead || pos_index == 1) && !collided
       @pos = shadow_pos
       @gameboard = shadow_gameboard
     end
   end
 
   def fall
-    if pos[0] + piece_height != @gameboard.height
+    if pos[0] + height < @gameboard_height
       update(0, 1)
     else
-      @dead = true
+      eval_dead(true, true)
     end
   end
 
@@ -83,7 +100,7 @@ class Tetromino # A tetromino is a tetris piece
         return true
       end
     when "right"
-      if pos[1] < @gameboard.width - piece_width
+      if pos[1] < @gameboard_width - width
         update(1, 1, allow_die=false)
         return true
       end
@@ -96,7 +113,7 @@ class Tetromino # A tetromino is a tetris piece
       end
       return @accelerated
     when "space"
-      while !dead
+      while !hard_dead
         fall
       end
       return true
@@ -104,20 +121,18 @@ class Tetromino # A tetromino is a tetris piece
     false
   end
 
-  def rotate(allow_die=true)
-    gameboardWithoutTetromino = put_tetromino(gameboard, pos, piece_width, piece_height, piece_data, clear=true)
-    shadowPieceData = Gameboard[*(0...piece_width).map {|i| piece_data.transpose.row(i).to_a.reverse}] # Matrix.transpose almost rotates, but we need to reverse each row. Asterix to prevent everything to be nested in one []
+  def rotate()
+    gameboardWithoutTetromino = put_tetromino(gameboard, pos, width, height, piece_data, clear=true)
+    shadowPieceData = Matrix[*(0...width).map {|i| piece_data.transpose.row(i).to_a.reverse}] # Matrix.transpose almost rotates, but we need to reverse each row. Asterix to prevent everything to be nested in one []
     shadow_width = shadowPieceData.row(0).to_a.length
     shadow_height = shadowPieceData.column(0).to_a.length
     begin
       shadow_gameboard = put_tetromino(gameboardWithoutTetromino, pos, shadow_width, shadow_height, shadowPieceData)
       if collision_detect(shadow_gameboard, pos, [shadow_height, shadow_width], shadowPieceData)
-        if allow_die
-          @dead = true
-        end
+        @@hard_dead = true
       else
-        @piece_width = shadow_width
-        @piece_height = shadow_height
+        @width = shadow_width
+        @height = shadow_height
         @piece_data = shadowPieceData
         @gameboard = shadow_gameboard
       end
