@@ -1,8 +1,9 @@
 class Game
   attr_accessor :tetromino
 
-  def initialize(gameboard_height, gameboard_width, log)
+  def initialize(gameboard_height, gameboard_width, log, scoreboard)
     @log = log
+    @scoreboard = scoreboard
 
     # tetrominos from https://user-images.githubusercontent.com/124208/127236186-733e6247-0824-4b2e-b464-552cd700bb65.png
     @tetromino_shapes = [
@@ -50,13 +51,19 @@ class Game
   end
 
   def remove_filled_rows
+    row_count = 0
     -1.downto(-@gameboard.height).each do |row|
       while !@gameboard.row(row).include?(0) # while row is full
         (0...@gameboard.width).each {|i| @gameboard[row, i] = 0} # set the line to all zeros
         unless row == -@gameboard.height # top row doesn't have anything above it, so no need to move stuff down.
           move_all_down(row)
         end
+        @scoreboard.score_row
+        row_count += 1
       end
+    end
+    if row_count == 4 
+      @scoreboard.score_tetris
     end
   end
 

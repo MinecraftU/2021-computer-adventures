@@ -3,6 +3,7 @@ require "matrix" # matrix is installed when you install ruby, no need to use gem
 require_relative "tetromino"
 require_relative "gameboard"
 require_relative "game"
+require_relative "scoreboard"
 require "logger"
 
 log = Logger.new('log.txt')
@@ -11,13 +12,14 @@ size = 40
 gameboard_height = 20
 gameboard_width = 10
 
-game = Game.new(gameboard_height, gameboard_width, log)
+scoreboard = Scoreboard.new(gameboard_width, gameboard_height)
+game = Game.new(gameboard_height, gameboard_width, log, scoreboard)
 
 # These are Ruby2d vars that need to be set
 set title: "Tetris"
 set background: "white"
 set width: size*gameboard_width
-set height: size*gameboard_height
+set height: size*gameboard_height+30
 
 t = 1
 update do
@@ -34,7 +36,7 @@ update do
       game.remove_filled_rows
       game.create_tetromino
     end
-    game.draw([0, 0], size)
+    game.draw([0, 30], size)
     game.tetromino.fall
     game.update_gameboard
     game.tetromino.reset_fall_rate
@@ -47,7 +49,7 @@ on :key_held do |event|
   if event.key == "down"
     game.tetromino.moved = game.tetromino.move(event.key)
     game.update_gameboard
-    game.draw([0, 0], size)
+    game.draw([0, 30], size)
   end
 end
 
@@ -55,7 +57,7 @@ on :key_down do |event|
   if ["left", "right", "up", "space"].include?(event.key)
     game.tetromino.moved = game.tetromino.move(event.key)
     game.update_gameboard
-    game.draw([0, 0], size)
+    game.draw([0, 30], size)
   end
 end
 
