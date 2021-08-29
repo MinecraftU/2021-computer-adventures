@@ -40,7 +40,7 @@ class Game
 
   def create_tetromino()
     piece_data = @tetromino_shapes.sample
-    pos = [0, 5 - piece_data.row(0).to_a.length / 2]
+    pos = [0, @gameboard_width / 2 - piece_data.row(0).to_a.length / 2]
     @tetromino = Tetromino.new(@gameboard, piece_data, pos, @gameboard_height, @gameboard_width)
     @gameboard = tetromino.put_tetromino(@gameboard, pos, tetromino.width, tetromino.height)
   end
