@@ -20,26 +20,46 @@ set background: "white"
 set width: size*gameboard_width
 set height: size*gameboard_height+30
 
+game_over = false
+game_over_tick = -1
 t = 1
+
 update do
-  begin
-    if t % (10 / game.tetromino.fall_rate) == 0
+  if !game_over
+    begin
+      if t % (10 / game.tetromino.fall_rate) == 0
+        game.tetromino.moved = false
+      end
+    rescue
       game.tetromino.moved = false
     end
-  rescue
-    game.tetromino.moved = false
-  end
 
-  if t % (60 / game.tetromino.fall_rate) == 0
-    game.draw([0, 30], size)
-    game.tetromino.fall
-    game.update_gameboard
-    game.tetromino.reset_fall_rate
-  end
-
-  if game.tetromino.hard_dead
-    game.remove_filled_rows
-    game.create_tetromino
+    if t % (60 / game.tetromino.fall_rate) == 0
+      if game.tetromino.hard_dead
+        if game.tetromino.pos[0] == 0 # if the tetromino died when still at highest y level
+          game.gameboard = Gameboard.zero(20, 10)
+          game.draw([0, 30], size)
+          set background: "red"
+          Text.new(
+            "GAME OVER",
+            x: 0,
+            y: size*gameboard_height / 2,
+            size: 50,
+            color: 'black',
+            z: 10
+          )
+          game_over = true
+          game_over_tick = t
+        else
+          game.remove_filled_rows
+          game.create_tetromino
+        end
+      end
+      game.draw([0, 30], size)
+      game.tetromino.fall
+      game.update_gameboard
+      game.tetromino.reset_fall_rate
+    end
   end
 
   t += 1
