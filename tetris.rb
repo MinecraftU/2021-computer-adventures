@@ -23,8 +23,8 @@ set height: size*gameboard_height+30
 game_over = false
 game_over_tick = -1
 t = 1
-update do
 
+update do
   if !game_over
     begin
       if t % (10 / game.tetromino.fall_rate) == 0
