@@ -1,5 +1,5 @@
 class Game
-  attr_accessor :tetromino
+  attr_accessor :tetromino, :gameboard
 
   def initialize(gameboard_height, gameboard_width, log, scoreboard)
     @log = log
