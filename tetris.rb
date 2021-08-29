@@ -24,10 +24,6 @@ game_over = false
 game_over_tick = -1
 t = 1
 update do
-  if game_over && (t - game_over_tick) == 180 # wait 3 seconds before program end
-    close # closes ruby2d window
-    exit(0)
-  end
 
   if !game_over
     begin
