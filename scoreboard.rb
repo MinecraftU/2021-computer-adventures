@@ -16,6 +16,7 @@ class Scoreboard
       color: 'black',
       z: 10
     )
+    @prev_tetris = false
   end
 
   def reset_boom_text
@@ -39,11 +40,16 @@ class Scoreboard
   def score_row
     @score += 100
     update_score_text
+    @prev_tetris = false
   end
 
   def score_tetris
-    @score += 400
+    @score += 800
+    if @prev_tetris
+      @score += 200
+    end
     update_score_text
     @boom_text.text = "TETRIS!"
+    @prev_tetris = true
   end
 end
