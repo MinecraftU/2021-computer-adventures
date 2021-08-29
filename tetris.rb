@@ -45,19 +45,27 @@ update do
   t += 1
 end
 
-on :key_held do |event|
-  if event.key == "down"
-    game.tetromino.moved = game.tetromino.move(event.key)
-    game.update_gameboard
-    game.draw([0, 30], size)
+on :key_down do |event|
+  if ["left", "right", "up", "space"].include?(event.key)
+    if !game.tetromino.moved
+      if t % 15 == 0 || ["up", "space"].include?(event.key)
+        game.tetromino.moved = game.tetromino.move(event.key)
+        game.update_gameboard
+        game.draw([0, 30], size)
+      end
+    end
   end
 end
 
-on :key_down do |event|
-  if ["left", "right", "up", "space"].include?(event.key)
-    game.tetromino.moved = game.tetromino.move(event.key)
-    game.update_gameboard
-    game.draw([0, 30], size)
+on :key_held do |event|
+  if ["left", "right", "down"].include?(event.key)
+    if !game.tetromino.moved
+      if t % 5 == 0
+        game.tetromino.moved = game.tetromino.move(event.key)
+        game.update_gameboard
+        game.draw([0, 30], size)
+      end
+    end
   end
 end
 
