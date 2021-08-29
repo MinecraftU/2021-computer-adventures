@@ -39,8 +39,10 @@ class Game
   end
 
   def create_tetromino()
-    @tetromino = Tetromino.new(@gameboard, @tetromino_shapes.sample, [0, 0], @gameboard_height, @gameboard_width)
-    @gameboard = tetromino.put_tetromino(@gameboard, [0, 0], tetromino.width, tetromino.height)
+    piece_data = @tetromino_shapes.sample
+    pos = [0, 5 - piece_data.row(0).to_a.length / 2]
+    @tetromino = Tetromino.new(@gameboard, piece_data, pos, @gameboard_height, @gameboard_width)
+    @gameboard = tetromino.put_tetromino(@gameboard, pos, tetromino.width, tetromino.height)
   end
 
   def move_all_down(row)
