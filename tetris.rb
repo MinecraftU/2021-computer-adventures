@@ -31,14 +31,15 @@ update do
   end
 
   if t % (60 / game.tetromino.fall_rate) == 0
-    if game.tetromino.hard_dead
-      game.remove_filled_rows
-      game.create_tetromino
-    end
     game.draw([0, 30], size)
     game.tetromino.fall
     game.update_gameboard
     game.tetromino.reset_fall_rate
+  end
+
+  if game.tetromino.hard_dead
+    game.remove_filled_rows
+    game.create_tetromino
   end
 
   t += 1

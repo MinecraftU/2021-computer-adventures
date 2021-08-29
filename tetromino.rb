@@ -129,7 +129,7 @@ class Tetromino # A tetromino is a tetris piece
     begin
       shadow_gameboard = put_tetromino(gameboardWithoutTetromino, pos, shadow_width, shadow_height, shadowPieceData)
       if collision_detect(shadow_gameboard, pos, [shadow_height, shadow_width], shadowPieceData)
-        @@hard_dead = true
+        @hard_dead = true
       else
         @width = shadow_width
         @height = shadow_height
