@@ -7,13 +7,13 @@ class Game
 
     # tetrominos from https://user-images.githubusercontent.com/124208/127236186-733e6247-0824-4b2e-b464-552cd700bb65.png
     @tetromino_shapes = [
-      Matrix[[1, 1, 1, 1]]
-      #Matrix[[6, 0, 0], [6, 6, 6]],
-      #Matrix[[0, 0, 7], [7, 7, 7]],
-      #Matrix[[2, 2], [2, 2]],
-      #Matrix[[0, 4, 4], [4, 4, 0]],
-      #Matrix[[0, 3, 0], [3, 3, 3]],
-      #Matrix[[5, 5, 0], [0, 5, 5]]
+      Matrix[[1, 1, 1, 1]],
+      Matrix[[6, 0, 0], [6, 6, 6]],
+      Matrix[[0, 0, 7], [7, 7, 7]],
+      Matrix[[2, 2], [2, 2]],
+      Matrix[[0, 4, 4], [4, 4, 0]],
+      Matrix[[0, 3, 0], [3, 3, 3]],
+      Matrix[[5, 5, 0], [0, 5, 5]]
     ]
     
     @color_map = {
