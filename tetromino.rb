@@ -18,7 +18,7 @@ class Tetromino # A tetromino is a tetris piece
     @moved = false
     @soft_dead = false
     @hard_dead = false
-    @fall_rate = 2 # ticks per second
+    @fall_rate = 30 # will fall every @fall_rate/60 seconds
     @accelerated = false
   end
 
@@ -88,9 +88,15 @@ class Tetromino # A tetromino is a tetris piece
 
   def reset_fall_rate
     if @accelerated
-      @fall_rate /= 5
+      @fall_rate *= 8
     end
     @accelerated = false
+  end
+
+  def update_fall_rate
+    if @fall_rate != 1
+      @fall_rate = 32 - @scoreboard.level*2
+    end
   end
 
   def move(dir)
@@ -110,7 +116,7 @@ class Tetromino # A tetromino is a tetris piece
     when "down"
       if !@accelerated && !hard_dead # needs && !hard_dead so no extra score is added in the interval between tetromino dying and new tetromino spawning
         @scoreboard.score_acceleration
-        @fall_rate *= 5
+        @fall_rate /= 8 
         @accelerated = true
       end
       return @accelerated
@@ -134,7 +140,7 @@ class Tetromino # A tetromino is a tetris piece
     begin
       shadow_gameboard = put_tetromino(gameboardWithoutTetromino, pos, shadow_width, shadow_height, shadowPieceData)
       if collision_detect(shadow_gameboard, pos, [shadow_height, shadow_width], shadowPieceData)
-        @hard_dead = true
+        return false
       else
         @width = shadow_width
         @height = shadow_height

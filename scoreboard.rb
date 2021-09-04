@@ -1,9 +1,13 @@
 class Scoreboard
+  attr_reader :level
+
   def initialize(gameboard_width, gameboard_height)
     @score = 0
+    @lines_cleared = 0
+    @level = 1
     # x_pos = Window.width / 2
     @text = Text.new(
-      'Score: 0',
+      'Level: 1 Score: 0',
       x: 0, y: 0,
       size: 30,
       color: 'black',
@@ -11,7 +15,7 @@ class Scoreboard
     )
     @boom_text = Text.new(
       '',
-      x: 200, y: 0,
+      x: 280, y: 0,
       size: 30,
       color: 'black',
       z: 10
@@ -23,32 +27,35 @@ class Scoreboard
     @boom_text.text = ""
   end
 
-  def update_score_text
-    @text.text = "Score: #{@score}"
+  def update
+    @level = @lines_cleared/5 + 1 # Update level
+    @text.text = "Level: #{@level} Score: #{@score}" # Update text
   end
 
   def score_acceleration
-    @score += 1
-    update_score_text
+    @score += 1*level
+    update
   end
 
   def score_hard_drop(dis)
-    @score += 2*dis
-    update_score_text
+    @score += 2*dis*level
+    update
   end
 
   def score_row
-    @score += 100
-    update_score_text
+    @score += 100*level
+    @lines_cleared += 1
+    update
     @prev_tetris = false
   end
 
   def score_tetris
-    @score += 800
+    @score += 800*level
     if @prev_tetris
-      @score += 200
+      @score += 200*level
     end
-    update_score_text
+    @lines_cleared += 8
+    update
     @boom_text.text = "TETRIS!"
     @prev_tetris = true
   end
