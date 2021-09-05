@@ -9,14 +9,14 @@ class Scoreboard
     @text = Text.new(
       'Level: 1 Score: 0',
       x: 0, y: 0,
-      size: 30,
+      size: 27,
       color: 'black',
       z: 10
     )
     @boom_text = Text.new(
       '',
-      x: 280, y: 0,
-      size: 30,
+      x: 290, y: 0,
+      size: 27,
       color: 'black',
       z: 10
     )
