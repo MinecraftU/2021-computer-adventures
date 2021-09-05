@@ -55,9 +55,11 @@ update do
       game.tetromino.moved = false
     end
 
-    if t % game.tetromino.fall_rate == 0
+    if t % (game.tetromino.fall_rate * 10) == 0
       scoreboard.reset_boom_text
+    end
 
+    if t % game.tetromino.fall_rate == 0
       game.draw([0, 40], size)
       game.tetromino.fall
       game.update_gameboard
