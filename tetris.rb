@@ -28,16 +28,14 @@ update do
   if !game_over
     if game.tetromino.hard_dead
       if game.tetromino.pos[0] == 0 # if the tetromino died when still at highest y level
-        game.gameboard = Gameboard.zero(20, 10)
-        game.draw([0, 40], size)
-        set background: "red"
+        set background: "random"
         Text.new(
           "GAME OVER",
-          x: 0,
+          x: 50,
           y: size*gameboard_height / 2,
           size: 50,
           color: 'black',
-          z: 10
+          z: 100
         )
         game_over = true
         game_over_tick = t
@@ -66,27 +64,35 @@ update do
       game.tetromino.reset_fall_rate
       game.tetromino.update_fall_rate
     end
+  else
+    if t % 20 == 0
+      set background: "random"
+    end
   end
 
   t += 1
 end
 
 on :key_down do |event|
-  if ["left", "right", "up", "space"].include?(event.key)
-    if (!game.tetromino.moved && t % 15 == 0) || ["up", "space"].include?(event.key)
-      game.tetromino.moved = game.tetromino.move(event.key)
-      game.update_gameboard
-      game.draw([0, 40], size)
+  if !game_over
+    if ["left", "right", "up", "space"].include?(event.key)
+      if (!game.tetromino.moved && t % 15 == 0) || ["up", "space"].include?(event.key)
+        game.tetromino.moved = game.tetromino.move(event.key)
+        game.update_gameboard
+        game.draw([0, 40], size)
+      end
     end
   end
 end
 
 on :key_held do |event|
-  if ["left", "right", "down"].include?(event.key)
-    if t % 5 == 0
-      game.tetromino.moved = game.tetromino.move(event.key)
-      game.update_gameboard
-      game.draw([0, 40], size)
+  if !game_over
+    if ["left", "right", "down"].include?(event.key)
+      if t % 5 == 0
+        game.tetromino.moved = game.tetromino.move(event.key)
+        game.update_gameboard
+        game.draw([0, 40], size)
+      end
     end
   end
 end

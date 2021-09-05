@@ -95,7 +95,7 @@ class Tetromino # A tetromino is a tetris piece
 
   def update_fall_rate
     if @fall_rate != 1
-      @fall_rate = 32 - @scoreboard.level*2
+      @fall_rate = 32 - @scoreboard.level
     end
   end
 
