@@ -24,7 +24,15 @@ game_over = false
 game_over_tick = -1
 t = 1
 
+paused = 0
+
 update do
+  if paused != 0
+    if paused > 0
+      paused -= 1
+    end
+    next
+  end
   if !game_over
     if game.tetromino.hard_dead
       if game.tetromino.pos[0] == 0 # if the tetromino died when still at highest y level
@@ -40,7 +48,7 @@ update do
         game_over = true
         game_over_tick = t
       else
-        game.remove_filled_rows
+        paused = game.remove_filled_rows
         game.create_tetromino
       end
     end
@@ -83,6 +91,13 @@ on :key_down do |event|
         game.update_gameboard
         game.update_ghost_tetromino
         game.draw([0, 40], size)
+      end
+    end
+    if ["p"].include?(event.key)
+      if paused > -1
+        paused = -1
+      elsif paused == -1
+        paused = 0
       end
     end
   end

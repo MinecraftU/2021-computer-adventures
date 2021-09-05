@@ -96,6 +96,7 @@ class Game
         @scoreboard.score_row
       end
     end
+    return row_count*10 # give a slight pause relative to how many rows were cleared
   end
 
   def draw(start_pos, size) # size is the side length of a square
