@@ -61,9 +61,11 @@ update do
       game.draw([0, 40], size)
       game.tetromino.fall
       game.update_gameboard
+      game.update_ghost_tetromino
       game.tetromino.reset_fall_rate
       game.tetromino.update_fall_rate
     end
+
   else
     if t % 20 == 0
       set background: "random"
@@ -79,6 +81,7 @@ on :key_down do |event|
       if (!game.tetromino.moved && t % 15 == 0) || ["up", "space"].include?(event.key)
         game.tetromino.moved = game.tetromino.move(event.key)
         game.update_gameboard
+        game.update_ghost_tetromino
         game.draw([0, 40], size)
       end
     end
@@ -91,6 +94,7 @@ on :key_held do |event|
       if t % 5 == 0
         game.tetromino.moved = game.tetromino.move(event.key)
         game.update_gameboard
+        game.update_ghost_tetromino
         game.draw([0, 40], size)
       end
     end
