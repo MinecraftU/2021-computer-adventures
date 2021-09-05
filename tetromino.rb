@@ -4,9 +4,10 @@ class Tetromino # A tetromino is a tetris piece
   attr_reader :piece_data, :width, :height, :pos, :gameboard, :soft_dead, :hard_dead, :fall_rate
   attr_accessor :moved
 
-  def initialize(gameboard, piece_data, pos, gameboard_height, gameboard_width)
+  def initialize(gameboard, piece_data, pos, gameboard_height, gameboard_width, scoreboard)
     raise ArgumentError unless piece_data.is_a? Matrix
     
+    @scoreboard = scoreboard
     @gameboard_height = gameboard_height
     @gameboard_width = gameboard_width
     @gameboard = gameboard
@@ -17,7 +18,7 @@ class Tetromino # A tetromino is a tetris piece
     @moved = false
     @soft_dead = false
     @hard_dead = false
-    @fall_rate = 2 # ticks per second
+    @fall_rate = 30 # will fall every @fall_rate/60 seconds
     @accelerated = false
   end
 
@@ -87,9 +88,15 @@ class Tetromino # A tetromino is a tetris piece
 
   def reset_fall_rate
     if @accelerated
-      @fall_rate /= 5
+      @fall_rate *= 8
     end
     @accelerated = false
+  end
+
+  def update_fall_rate
+    if @fall_rate != 1
+      @fall_rate = 32 - @scoreboard.level
+    end
   end
 
   def move(dir)
@@ -107,15 +114,19 @@ class Tetromino # A tetromino is a tetris piece
     when "up"
       return rotate
     when "down"
-      if !@accelerated
-        @fall_rate *= 5
+      if !@accelerated && !hard_dead # needs && !hard_dead so no extra score is added in the interval between tetromino dying and new tetromino spawning
+        @scoreboard.score_acceleration
+        @fall_rate /= 8 
         @accelerated = true
       end
       return @accelerated
     when "space"
+      start_y = pos[0]
       while !hard_dead
         fall
       end
+      end_y = pos[0]
+      @scoreboard.score_hard_drop(end_y - start_y)
       return true
     end
     false
@@ -129,7 +140,7 @@ class Tetromino # A tetromino is a tetris piece
     begin
       shadow_gameboard = put_tetromino(gameboardWithoutTetromino, pos, shadow_width, shadow_height, shadowPieceData)
       if collision_detect(shadow_gameboard, pos, [shadow_height, shadow_width], shadowPieceData)
-        @hard_dead = true
+        return false
       else
         @width = shadow_width
         @height = shadow_height

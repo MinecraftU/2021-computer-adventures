@@ -41,7 +41,7 @@ class Game
   def create_tetromino()
     piece_data = @tetromino_shapes.sample
     pos = [0, @gameboard_width / 2 - piece_data.row(0).to_a.length / 2]
-    @tetromino = Tetromino.new(@gameboard, piece_data, pos, @gameboard_height, @gameboard_width)
+    @tetromino = Tetromino.new(@gameboard, piece_data, pos, @gameboard_height, @gameboard_width, @scoreboard)
     @gameboard = tetromino.put_tetromino(@gameboard, pos, tetromino.width, tetromino.height)
   end
 
@@ -62,12 +62,15 @@ class Game
         unless row == -@gameboard_height # top row doesn't have anything above it, so no need to move stuff down.
           move_all_down(row)
         end
-        @scoreboard.score_row
         row_count += 1
       end
     end
     if row_count == 4 
       @scoreboard.score_tetris
+    else
+      row_count.times do
+        @scoreboard.score_row
+      end
     end
   end
 
