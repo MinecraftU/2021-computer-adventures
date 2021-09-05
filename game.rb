@@ -8,12 +8,12 @@ class Game
     # tetrominos from https://user-images.githubusercontent.com/124208/127236186-733e6247-0824-4b2e-b464-552cd700bb65.png
     @tetromino_shapes = [
       Matrix[[1, 1, 1, 1]],
-      Matrix[[6, 0, 0], [6, 6, 6]],
-      Matrix[[0, 0, 7], [7, 7, 7]],
       Matrix[[2, 2], [2, 2]],
-      Matrix[[0, 4, 4], [4, 4, 0]],
       Matrix[[0, 3, 0], [3, 3, 3]],
-      Matrix[[5, 5, 0], [0, 5, 5]]
+      Matrix[[0, 4, 4], [4, 4, 0]],
+      Matrix[[5, 5, 0], [0, 5, 5]],
+      Matrix[[6, 0, 0], [6, 6, 6]],
+      Matrix[[0, 0, 7], [7, 7, 7]]
     ]
     
     @color_map = {
@@ -23,7 +23,8 @@ class Game
       4=>"green",
       5=>"red",
       6=>"blue",
-      7=>"orange"
+      7=>"orange",
+      8=>"#C9C9C9" # light grey
     } # Color scheme source: https://www.schemecolor.com/tetris-game-color-scheme.php
 
     @gameboard_height = gameboard_height
@@ -40,9 +41,32 @@ class Game
 
   def create_tetromino()
     piece_data = @tetromino_shapes.sample
+    @color_num = @tetromino_shapes.index(piece_data)+1
     pos = [0, @gameboard_width / 2 - piece_data.row(0).to_a.length / 2]
     @tetromino = Tetromino.new(@gameboard, piece_data, pos, @gameboard_height, @gameboard_width, @scoreboard)
     @gameboard = tetromino.put_tetromino(@gameboard, pos, tetromino.width, tetromino.height)
+  end
+
+  def update_ghost_tetromino
+    ghost_piece_data = Matrix[*tetromino.piece_data]
+    (0...ghost_piece_data.row(0).to_a.length).each do |i|
+      (0...ghost_piece_data.column(0).to_a.length).each do |j|
+        if ghost_piece_data[j, i] != 0
+          ghost_piece_data[j, i] = 8
+        end
+      end
+    end
+    ghost_tetromino = Tetromino.new(@gameboard, ghost_piece_data, tetromino.pos, @gameboard_height, @gameboard_width, @scoreboard)
+    ghost_tetromino.hard_drop
+    @gameboard = ghost_tetromino.put_tetromino(@gameboard, ghost_tetromino.pos, ghost_tetromino.width, ghost_tetromino.height)
+
+    (0...tetromino.width).each do |i|
+      (0...tetromino.height).each do |j|
+        if tetromino.piece_data[j, i] != 0
+          gameboard[tetromino.pos[0]+j, tetromino.pos[1]+i] = @color_num
+        end
+      end
+    end
   end
 
   def move_all_down(row)

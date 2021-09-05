@@ -99,6 +99,12 @@ class Tetromino # A tetromino is a tetris piece
     end
   end
 
+  def hard_drop
+    while !hard_dead
+      fall
+    end
+  end
+  
   def move(dir)
     case dir
     when "left"
@@ -122,9 +128,7 @@ class Tetromino # A tetromino is a tetris piece
       return @accelerated
     when "space"
       start_y = pos[0]
-      while !hard_dead
-        fall
-      end
+      hard_drop
       end_y = pos[0]
       @scoreboard.score_hard_drop(end_y - start_y)
       return true
