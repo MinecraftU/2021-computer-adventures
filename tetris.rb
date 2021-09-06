@@ -49,7 +49,7 @@ update do
         game_over = true
         game_over_tick = t
       else
-        paused = game.animate_filled_rows
+        paused = game.animate_filled_rows ? 10 : 0
         log.info("animate_filled_rows returned #{paused}")
         if paused == 0
           log.info("removing filled rows now")

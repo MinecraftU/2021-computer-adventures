@@ -80,15 +80,15 @@ class Game
   end
 
   def animate_filled_rows
-    row_count = 0
+    pause = false
     -1.downto(-@gameboard.height).each do |row|
       while !@gameboard.row(row).include?(0) && !@gameboard.row(row).include?(9) # row is full
         (0...@gameboard_width).each {|i| @gameboard[row, i] = 9}
-        row_count += 1
+        pause = true
       end
     end
     draw([0, 40], 40)
-    return row_count*20
+    return pause
   end
 
   def remove_filled_rows
