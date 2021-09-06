@@ -82,18 +82,18 @@ class Game
   def animate_filled_rows
     row_count = 0
     -1.downto(-@gameboard.height).each do |row|
-      while !@gameboard.row(row).include?(0) # while row is full
+      while !@gameboard.row(row).include?(0) && !@gameboard.row(row).include?(9) # row is full
         (0...@gameboard_width).each {|i| @gameboard[row, i] = 9}
         row_count += 1
       end
     end
-    return row_count*10
+    return row_count*20
   end
 
   def remove_filled_rows
     row_count = 0
     -1.downto(-@gameboard.height).each do |row|
-      if @gameboard.row(row).include?(9) # while row is full
+      while @gameboard.row(row).include?(9) # row is full
         (0...@gameboard_width).each {|i| @gameboard[row, i] = 0} # set the line to all zeros
         unless row == -@gameboard_height # top row doesn't have anything above it, so no need to move stuff down.
           move_all_down(row)
