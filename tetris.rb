@@ -48,8 +48,11 @@ update do
         game_over = true
         game_over_tick = t
       else
-        paused = game.remove_filled_rows
-        game.create_tetromino
+        paused = game.animate_filled_rows
+        if paused == 0
+          game.remove_filled_rows
+          game.create_tetromino
+        end
       end
     end
 

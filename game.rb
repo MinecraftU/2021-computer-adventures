@@ -24,7 +24,8 @@ class Game
       5=>"red",
       6=>"blue",
       7=>"orange",
-      8=>"#C9C9C9" # light grey
+      8=>"#C9C9C9", # light grey
+      9=>"#d4af37" # gold
     } # Color scheme source: https://www.schemecolor.com/tetris-game-color-scheme.php
 
     @gameboard_height = gameboard_height
@@ -78,10 +79,21 @@ class Game
     end
   end
 
-  def remove_filled_rows
+  def animate_filled_rows
     row_count = 0
     -1.downto(-@gameboard.height).each do |row|
       while !@gameboard.row(row).include?(0) # while row is full
+        (0...@gameboard_width).each {|i| @gameboard[row, i] = 9}
+        row_count += 1
+      end
+    end
+    return row_count*10
+  end
+
+  def remove_filled_rows
+    row_count = 0
+    -1.downto(-@gameboard.height).each do |row|
+      if @gameboard.row(row).include?(9) # while row is full
         (0...@gameboard_width).each {|i| @gameboard[row, i] = 0} # set the line to all zeros
         unless row == -@gameboard_height # top row doesn't have anything above it, so no need to move stuff down.
           move_all_down(row)
@@ -96,7 +108,6 @@ class Game
         @scoreboard.score_row
       end
     end
-    return row_count*10 # give a slight pause relative to how many rows were cleared
   end
 
   def draw(start_pos, size) # size is the side length of a square
