@@ -87,6 +87,7 @@ class Game
         row_count += 1
       end
     end
+    draw([0, 40], 40)
     return row_count*20
   end
 
