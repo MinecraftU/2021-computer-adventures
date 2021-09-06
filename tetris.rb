@@ -28,7 +28,6 @@ paused = 0
 
 update do
   if paused != 0
-    log.info("paused for #{paused}")
     if paused > 0
       paused -= 1
     end
@@ -50,9 +49,7 @@ update do
         game_over_tick = t
       else
         paused = game.animate_filled_rows ? 10 : 0
-        log.info("animate_filled_rows returned #{paused}")
         if paused == 0
-          log.info("removing filled rows now")
           game.remove_filled_rows
           game.create_tetromino
         end
