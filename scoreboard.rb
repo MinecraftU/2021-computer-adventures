@@ -1,5 +1,5 @@
 class Scoreboard
-  attr_reader :level
+  attr_reader :level, :score
 
   def initialize(gameboard_width, gameboard_height)
     @score = 0

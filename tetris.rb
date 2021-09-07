@@ -21,7 +21,6 @@ set width: size*gameboard_width
 set height: size*gameboard_height+40
 
 game_over = false
-game_over_tick = -1
 t = 1
 
 paused = 0
@@ -45,8 +44,57 @@ update do
           color: 'black',
           z: 100
         )
+
+        leaderboard_contents = []
+        File.read("leaderboard.txt").split("\n").each do |line|
+          line_contents = []
+          line.split.each_with_index do |item, i|
+            if i == 0
+              line_contents << item
+            else
+              line_contents << item.to_i
+            end
+          end
+          leaderboard_contents << line_contents
+        end
+
+        begin
+          last_spot = leaderboard_contents[-1]
+        rescue => IndexError
+          last_spot = false
+        end
+
+        if (leaderboard_contents.length < 5) || last_spot[1] < scoreboard.score
+          # leaderboard file format: initials score level\ninitials score level...
+          print "Initials: "
+          initials = gets.chomp
+          
+          if leaderboard_contents.length != 0
+            new_leaderboard_contents = leaderboard_contents[0...leaderboard_contents.length]
+            leaderboard_contents.reverse.each do |spot|
+              index = leaderboard_contents.index(spot)
+              if spot[1] >= scoreboard.score
+                new_leaderboard_contents.insert(index+1, [initials, scoreboard.score, scoreboard.level])
+                puts spot[1]
+                puts scoreboard.score
+                break
+              elsif index == 0
+                new_leaderboard_contents.unshift([initials, scoreboard.score, scoreboard.level])
+                break
+              end
+            end
+            leaderboard_contents = new_leaderboard_contents
+          else
+            leaderboard_contents = [[initials, scoreboard.score, scoreboard.level]]
+          end
+
+          leaderboard_contents = leaderboard_contents[0...5]
+
+          new_leaderboard_text = (leaderboard_contents.map {|spot| spot.join(" ")}).join("\n")
+          File.write("leaderboard.txt", new_leaderboard_text)
+        end
+
         game_over = true
-        game_over_tick = t
       else
         paused = game.animate_filled_rows ? 10 : 0
         if paused == 0
@@ -60,7 +108,7 @@ update do
       if t % game.tetromino.fall_rate/6 == 0
         game.tetromino.moved = false
       end
-    rescue ZeroDivisionError
+    rescue => ZeroDivisionError
       game.tetromino.moved = false
     end
 
