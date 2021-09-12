@@ -11,6 +11,12 @@ log = Logger.new('log.txt')
 size = 40
 gameboard_height = 20
 gameboard_width = 10
+# For leaderboard stuff
+initials = ""
+on_leaderboard = false
+leaderboard_written = false
+text = []
+leaderboard_contents = []
 
 scoreboard = Scoreboard.new(gameboard_width, gameboard_height)
 game = Game.new(gameboard_height, gameboard_width, log, scoreboard)
@@ -45,7 +51,6 @@ update do
           z: 100
         )
 
-        leaderboard_contents = []
         File.read("leaderboard.txt").split("\n").each do |line|
           line_contents = []
           line.split.each_with_index do |item, i|
@@ -65,33 +70,9 @@ update do
         end
 
         if (leaderboard_contents.length < 5) || last_spot[1] < scoreboard.score
-          # leaderboard file format: initials score level\ninitials score level...
-          print "Initials: "
-          initials = gets.chomp
-          
-          if leaderboard_contents.length != 0
-            new_leaderboard_contents = leaderboard_contents[0...leaderboard_contents.length]
-            leaderboard_contents.reverse.each do |spot|
-              index = leaderboard_contents.index(spot)
-              if spot[1] >= scoreboard.score
-                new_leaderboard_contents.insert(index+1, [initials, scoreboard.score, scoreboard.level])
-                puts spot[1]
-                puts scoreboard.score
-                break
-              elsif index == 0
-                new_leaderboard_contents.unshift([initials, scoreboard.score, scoreboard.level])
-                break
-              end
-            end
-            leaderboard_contents = new_leaderboard_contents
-          else
-            leaderboard_contents = [[initials, scoreboard.score, scoreboard.level]]
-          end
-
-          leaderboard_contents = leaderboard_contents[0...5]
-
-          new_leaderboard_text = (leaderboard_contents.map {|spot| spot.join(" ")}).join("\n")
-          File.write("leaderboard.txt", new_leaderboard_text)
+          text << Text.new("Please press 3 letters or dashes as your", y:gameboard_height*size/3, z:1000)
+          text << Text.new(" initials. This is for the leaderboard.", y:gameboard_height*size/3+15, z:1000)
+          on_leaderboard = true
         end
 
         game_over = true
@@ -129,6 +110,36 @@ update do
     if t % 20 == 0
       set background: "random"
     end
+
+    if on_leaderboard == true && initials.length == 3 && leaderboard_written == false
+      # leaderboard file format: initials score level\ninitials score level...
+      initials = initials.upcase()
+      text.each {|i| i.remove}
+      
+      if leaderboard_contents.length != 0
+        new_leaderboard_contents = leaderboard_contents[0...leaderboard_contents.length]
+        leaderboard_contents.reverse.each do |spot|
+          index = leaderboard_contents.index(spot)
+          if spot[1] >= scoreboard.score
+            new_leaderboard_contents.insert(index+1, [initials, scoreboard.score, scoreboard.level])
+            break
+          elsif index == 0
+            new_leaderboard_contents.unshift([initials, scoreboard.score, scoreboard.level])
+            break
+          end
+        end
+        leaderboard_contents = new_leaderboard_contents
+      else
+        leaderboard_contents = [[initials, scoreboard.score, scoreboard.level]]
+      end
+
+      leaderboard_contents = leaderboard_contents[0...5]
+
+      new_leaderboard_text = (leaderboard_contents.map {|spot| spot.join(" ")}).join("\n")
+      File.write("leaderboard.txt", new_leaderboard_text)
+
+      leaderboard_written = true
+    end
   end
 
   t += 1
@@ -150,6 +161,10 @@ on :key_down do |event|
       elsif paused == -1
         paused = 0
       end
+    end
+  else
+    if "qwertyuiopasdfghjklzxcvbnm-".include?(event.key) && initials.length != 3
+      initials += event.key
     end
   end
 end
