@@ -28,7 +28,7 @@ paused = 0
 started = false
 logo_text = Text.new(
   "TETRIS",
-  x: 100,
+  x: 105,
   y: size*gameboard_height / 2 - 350,
   font: 'RussoOne-Regular.ttf',
   size: 50,
@@ -37,7 +37,7 @@ logo_text = Text.new(
 )
 start_text = Text.new(
   "Press T to Start",
-  x: 80,
+  x: 85,
   y: size*gameboard_height / 2 - 150,
   font: 'RussoOne-Regular.ttf',
   size: 30,
