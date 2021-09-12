@@ -25,8 +25,18 @@ game_over_tick = -1
 t = 1
 
 paused = 0
+started = false
+start_text = Text.new(
+  "Press T to Start",
+  x: 90,
+  y: size*gameboard_height / 2 - 150,
+  size: 30,
+  color: 'blue',
+  z: 100
+)
 
 update do
+  unless started then next end
   if paused != 0
     if paused > 0
       paused -= 1
@@ -102,6 +112,11 @@ on :key_down do |event|
       elsif paused == -1
         paused = 0
       end
+    end
+    if ["t"].include?(event.key)
+      start_text.remove
+      scoreboard.update
+      started = true
     end
   end
 end
