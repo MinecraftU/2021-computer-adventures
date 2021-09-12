@@ -86,10 +86,10 @@ class Game
       -1.downto(-@gameboard.height).each do |row|
         while !@gameboard.row(row).include?(0) && !@gameboard.row(row).include?(9) && !@gameboard.row(row).include?(10) # row is full
           (0...@gameboard_width).each {|i| @gameboard[row, i] = 9}
-          pause_length = 14
+          pause_length = 16
         end
       end
-    elsif paused_for < 6
+    elsif paused_for < 8
       -1.downto(-@gameboard.height).each do |row|
         while @gameboard.row(row).include?(9) # row is full
           (0...@gameboard_width).each {|i| @gameboard[row, i] = 10}
