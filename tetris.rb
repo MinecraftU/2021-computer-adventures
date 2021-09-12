@@ -26,10 +26,20 @@ t = 1
 
 paused = 0
 started = false
+logo_text = Text.new(
+  "TETRIS",
+  x: 100,
+  y: size*gameboard_height / 2 - 350,
+  font: 'RussoOne-Regular.ttf',
+  size: 50,
+  color: 'red',
+  z: 100
+)
 start_text = Text.new(
   "Press T to Start",
-  x: 90,
+  x: 80,
   y: size*gameboard_height / 2 - 150,
+  font: 'RussoOne-Regular.ttf',
   size: 30,
   color: 'blue',
   z: 100
@@ -115,6 +125,7 @@ on :key_down do |event|
     end
     if ["t"].include?(event.key)
       start_text.remove
+      logo_text.remove
       scoreboard.update
       started = true
     end
