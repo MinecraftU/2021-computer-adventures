@@ -107,7 +107,7 @@ update do
 end
 
 on :key_down do |event|
-  if !game_over and started
+  if !game_over && started
     if ["left", "right", "up", "space"].include?(event.key)
       if (!game.tetromino.moved && t % 15 == 0) || ["up", "space"].include?(event.key)
         game.tetromino.moved = game.tetromino.move(event.key)
@@ -133,7 +133,7 @@ on :key_down do |event|
 end
 
 on :key_held do |event|
-  if !game_over
+  if !game_over && started
     if ["left", "right", "down"].include?(event.key)
       if t % 5 == 0
         game.tetromino.moved = game.tetromino.move(event.key)
