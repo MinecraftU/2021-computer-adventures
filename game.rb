@@ -25,7 +25,8 @@ class Game
       6=>"blue",
       7=>"orange",
       8=>"#C9C9C9", # light grey
-      9=>"#d4af37" # gold
+      9=>"#f9d35a", # yellow/gold
+      10=>"#fff2c8" # light yellow
     } # Color scheme source: https://www.schemecolor.com/tetris-game-color-scheme.php
 
     @gameboard_height = gameboard_height
@@ -79,22 +80,30 @@ class Game
     end
   end
 
-  def animate_filled_rows
-    pause = false
-    -1.downto(-@gameboard.height).each do |row|
-      while !@gameboard.row(row).include?(0) && !@gameboard.row(row).include?(9) # row is full
-        (0...@gameboard_width).each {|i| @gameboard[row, i] = 9}
-        pause = true
+  def animate_filled_rows(paused_for)
+    pause_length = paused_for
+    if paused_for == 0
+      -1.downto(-@gameboard.height).each do |row|
+        while !@gameboard.row(row).include?(0) && !@gameboard.row(row).include?(9) && !@gameboard.row(row).include?(10) # row is full
+          (0...@gameboard_width).each {|i| @gameboard[row, i] = 9}
+          pause_length = 14
+        end
+      end
+    elsif paused_for < 6
+      -1.downto(-@gameboard.height).each do |row|
+        while @gameboard.row(row).include?(9) # row is full
+          (0...@gameboard_width).each {|i| @gameboard[row, i] = 10}
+        end
       end
     end
     draw([0, 40], 40)
-    return pause
+    return pause_length
   end
 
   def remove_filled_rows
     row_count = 0
     -1.downto(-@gameboard.height).each do |row|
-      while @gameboard.row(row).include?(9) # row is full
+      while @gameboard.row(row).include?(10) # row is full
         (0...@gameboard_width).each {|i| @gameboard[row, i] = 0} # set the line to all zeros
         unless row == -@gameboard_height # top row doesn't have anything above it, so no need to move stuff down.
           move_all_down(row)
