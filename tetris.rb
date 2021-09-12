@@ -51,6 +51,9 @@ update do
           z: 100
         )
 
+        unless File.exist?("leaderboard.txt") then
+          File.new "leaderboard.txt","w+"
+        end
         File.read("leaderboard.txt").split("\n").each do |line|
           line_contents = []
           line.split.each_with_index do |item, i|
