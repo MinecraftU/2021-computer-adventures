@@ -7,7 +7,7 @@ class Scoreboard
     @level = 1
     # x_pos = Window.width / 2
     @text = Text.new(
-      'Level: 1 Score: 0',
+      '',
       x: 0, y: 0,
       size: 27,
       color: 'black',

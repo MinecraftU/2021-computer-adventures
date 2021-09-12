@@ -25,8 +25,28 @@ game_over_tick = -1
 t = 1
 
 paused = 0
+started = false
+logo_text = Text.new(
+  "TETRIS",
+  x: 105,
+  y: size*gameboard_height / 2 - 350,
+  font: 'RussoOne-Regular.ttf',
+  size: 50,
+  color: 'red',
+  z: 100
+)
+start_text = Text.new(
+  "Press T to Start",
+  x: 85,
+  y: size*gameboard_height / 2 - 150,
+  font: 'RussoOne-Regular.ttf',
+  size: 30,
+  color: 'blue',
+  z: 100
+)
 
 update do
+  unless started then next end
   if paused != 0
     if paused > 0
       paused -= 1
@@ -87,7 +107,7 @@ update do
 end
 
 on :key_down do |event|
-  if !game_over
+  if !game_over && started
     if ["left", "right", "up", "space"].include?(event.key)
       if (!game.tetromino.moved && t % 15 == 0) || ["up", "space"].include?(event.key)
         game.tetromino.moved = game.tetromino.move(event.key)
@@ -104,10 +124,16 @@ on :key_down do |event|
       end
     end
   end
+  if ["t"].include?(event.key) and !started
+    start_text.remove
+    logo_text.remove
+    scoreboard.update
+    started = true
+  end
 end
 
 on :key_held do |event|
-  if !game_over
+  if !game_over && started
     if ["left", "right", "down"].include?(event.key)
       if t % 5 == 0
         game.tetromino.moved = game.tetromino.move(event.key)
