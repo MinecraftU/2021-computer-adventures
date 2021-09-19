@@ -29,6 +29,7 @@ set height: size*gameboard_height+40
 game_over = false
 t = 1
 
+log = Logger.new('log.txt')
 paused = 0
 started = false
 logo_text = Text.new(
@@ -49,6 +50,28 @@ start_text = Text.new(
   color: 'blue',
   z: 100
 )
+leaderboard_text_lines = ["Leaderboard"]
+leaderboard_contents = File.read("leaderboard.txt").split("\n")
+highest_score_length = leaderboard_contents[0].split[1].length
+leaderboard_contents = leaderboard_contents.map {|line| 
+  line.split[0] + " "*6 + 
+  line.split[1].ljust([highest_score_length, 5].max) + " " + 
+  line.split[2]
+}
+leaderboard_contents.insert(0, "Initials" + " " + "Score".ljust(highest_score_length) + " " + "Level")
+leaderboard_text_lines += leaderboard_contents
+leaderboard_text = []
+(0...leaderboard_text_lines.length).each do |line_num|
+    leaderboard_text << Text.new(
+    leaderboard_text_lines[line_num],
+    x: 20,
+    y: size*gameboard_height / 2 + 28*line_num,
+    font: 'AzeretMono-Light.ttf',
+    size: 28,
+    color: 'black',
+    z: 100
+  )
+end
 
 update do
   unless started then next end
@@ -186,13 +209,14 @@ on :key_down do |event|
       end
     end
   else
-    if "qwertyuiopasdfghjklzxcvbnm-".include?(event.key) && initials.length != 3
+    if "qwertyuiopasdfghjklzxcvbnm-".include?(event.key) && initials.length != 3 && game_over
       initials += event.key
     end
   end
-  if ["t"].include?(event.key) and !started
+  if ["t"].include?(event.key) && !started
     start_text.remove
     logo_text.remove
+    leaderboard_text.each {|text| text.remove}
     scoreboard.update
     started = true
   end
