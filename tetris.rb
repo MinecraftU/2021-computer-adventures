@@ -50,28 +50,33 @@ start_text = Text.new(
   color: 'blue',
   z: 100
 )
-leaderboard_text_lines = ["Leaderboard"]
-leaderboard_contents = File.read("leaderboard.txt").split("\n")
-highest_score_length = leaderboard_contents[0].split[1].length
-leaderboard_contents = leaderboard_contents.map {|line| 
-  line.split[0] + " "*6 + 
-  line.split[1].ljust([highest_score_length, 5].max) + " " + 
-  line.split[2]
-}
-leaderboard_contents.insert(0, "Initials" + " " + "Score".ljust(highest_score_length) + " " + "Level")
-leaderboard_text_lines += leaderboard_contents
-leaderboard_text = []
-(0...leaderboard_text_lines.length).each do |line_num|
-    leaderboard_text << Text.new(
-    leaderboard_text_lines[line_num],
-    x: 20,
-    y: size*gameboard_height / 2 + 28*line_num,
-    font: 'AzeretMono-Light.ttf',
-    size: 28,
-    color: 'black',
-    z: 100
-  )
+
+def display_leaderboard(sz, gameboard_h)
+  leaderboard_text_lines = ["Leaderboard"]
+  leaderboard_contents = File.read("leaderboard.txt").split("\n")
+  highest_score_length = leaderboard_contents[0].split[1].length
+  leaderboard_contents = leaderboard_contents.map {|line| 
+    line.split[0] + " "*6 + 
+    line.split[1].ljust([highest_score_length, 5].max) + " " + 
+    line.split[2]
+  }
+  leaderboard_contents.insert(0, "Initials" + " " + "Score".ljust(highest_score_length) + " " + "Level")
+  leaderboard_text_lines += leaderboard_contents
+  leaderboard_text = []
+  (0...leaderboard_text_lines.length).each do |line_num|
+      leaderboard_text << Text.new(
+      leaderboard_text_lines[line_num],
+      x: 20,
+      y: sz*gameboard_h / 2 + 150 + 28*line_num,
+      font: 'AzeretMono-Light.ttf',
+      size: 28,
+      color: 'black',
+      z: 100
+    )
+  end
+  leaderboard_text
 end
+leaderboard_text = display_leaderboard(size, gameboard_height)
 
 update do
   unless started then next end
@@ -185,6 +190,12 @@ update do
       File.write("leaderboard.txt", new_leaderboard_text)
 
       leaderboard_written = true
+    else
+      not_on_leaderboard = true
+    end
+
+    if leaderboard_written || not_on_leaderboard
+      display_leaderboard(size, gameboard_height)
     end
   end
 
