@@ -46,9 +46,7 @@ class Game
     if @bag.length == 0
       @bag = @tetromino_shapes.shuffle
     end
-    puts "before", "#{@bag}"
     piece_data = @bag.pop
-    puts "after", "#{@bag}"
 
     @color_num = @tetromino_shapes.index(piece_data)+1
     pos = [0, @gameboard_width / 2 - piece_data.row(0).to_a.length / 2]
