@@ -34,6 +34,7 @@ class Game
     @gameboard = Gameboard.zero(gameboard_height, gameboard_width)
     @squares = Gameboard.zero(gameboard_height, gameboard_width)
 
+    @bag = []
     create_tetromino()
   end
 
@@ -42,7 +43,13 @@ class Game
   end
 
   def create_tetromino()
-    piece_data = @tetromino_shapes.sample
+    if @bag.length == 0
+      @bag = @tetromino_shapes.shuffle
+    end
+    puts "before", "#{@bag}"
+    piece_data = @bag.pop
+    puts "after", "#{@bag}"
+
     @color_num = @tetromino_shapes.index(piece_data)+1
     pos = [0, @gameboard_width / 2 - piece_data.row(0).to_a.length / 2]
     @tetromino = Tetromino.new(@gameboard, piece_data, pos, @gameboard_height, @gameboard_width, @scoreboard)
