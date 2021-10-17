@@ -1,13 +1,19 @@
+GIT
+  remote: https://github.com/zw963/ruby2d.git
+  revision: b005530e89e69f8b5497e35c1d71d8e76b51f944
+  branch: main
+  specs:
+    ruby2d (0.11.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
-    ruby2d (0.10.0)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
-  ruby2d
+  ruby2d!
 
 BUNDLED WITH
-   2.1.2
+   2.2.3
